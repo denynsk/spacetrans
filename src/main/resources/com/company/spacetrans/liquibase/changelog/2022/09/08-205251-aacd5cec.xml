@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="st">
+        <createTable tableName="ST_ATMOSPHERE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_ATMOSPHERE"/>
+            </column>
+            <column name="DESCRIPTION" type="CLOB"/>
+            <column name="PRESSURE" type="DOUBLE"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="st">
+        <createTable tableName="ST_ATMOSPHERE_ATMOSPHERIC_GAS_LINK">
+            <column name="ATMOSPHERE_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_ATMOSPHERE_ATMOSPHERIC_GAS_LINK"/>
+            </column>
+            <column name="ATMOSPHERIC_GAS_ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_ATMOSPHERE_ATMOSPHERIC_GAS_LINK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="st">
+        <createTable tableName="ST_ATMOSPHERIC_GAS">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_ATMOSPHERIC_GAS"/>
+            </column>
+            <column name="GAS_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VOLUME" type="DECIMAL(5, 2)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="st">
+        <createTable tableName="ST_GAS">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_GAS"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="st">
+        <createTable tableName="ST_MOON">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_MOON"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MASS" type="DOUBLE"/>
+            <column name="PICTURE" type="VARCHAR(1024)"/>
+            <column name="PLANET_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ATMOSPHERE_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="6" author="st">
+        <createTable tableName="ST_PLANET">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_PLANET"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MASS" type="DOUBLE"/>
+            <column name="PICTURE" type="VARCHAR(1024)"/>
+            <column name="SEMI_MAJOR_AXIS" type="DOUBLE"/>
+            <column name="ORBITAL_PERIOD" type="DOUBLE"/>
+            <column name="ROTATION_PERIOD" type="DOUBLE"/>
+            <column name="ATMOSPHERE_ID" type="UUID"/>
+            <column name="RINGS" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="7" author="st">
+        <createIndex indexName="IDX_ST_ATMOSPHERIC_GAS_GAS" tableName="ST_ATMOSPHERIC_GAS">
+            <column name="GAS_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="GAS_ID" baseTableName="ST_ATMOSPHERIC_GAS"
+                                 constraintName="FK_ST_ATMOSPHERIC_GAS_ON_GAS" referencedColumnNames="ID"
+                                 referencedTableName="ST_GAS"/>
+    </changeSet>
+    <changeSet id="8" author="st">
+        <createIndex indexName="IDX_ST_MOON_ATMOSPHERE" tableName="ST_MOON">
+            <column name="ATMOSPHERE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ATMOSPHERE_ID" baseTableName="ST_MOON"
+                                 constraintName="FK_ST_MOON_ON_ATMOSPHERE" referencedColumnNames="ID"
+                                 referencedTableName="ST_ATMOSPHERE"/>
+    </changeSet>
+    <changeSet id="9" author="st">
+        <createIndex indexName="IDX_ST_MOON_PLANET" tableName="ST_MOON">
+            <column name="PLANET_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="PLANET_ID" baseTableName="ST_MOON"
+                                 constraintName="FK_ST_MOON_ON_PLANET" referencedColumnNames="ID"
+                                 referencedTableName="ST_PLANET"/>
+    </changeSet>
+    <changeSet id="10" author="st">
+        <createIndex indexName="IDX_ST_PLANET_ATMOSPHERE" tableName="ST_PLANET">
+            <column name="ATMOSPHERE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="ATMOSPHERE_ID" baseTableName="ST_PLANET"
+                                 constraintName="FK_ST_PLANET_ON_ATMOSPHERE" referencedColumnNames="ID"
+                                 referencedTableName="ST_ATMOSPHERE"/>
+    </changeSet>
+    <changeSet id="11" author="st">
+        <addForeignKeyConstraint baseColumnNames="ATMOSPHERE_ID" baseTableName="ST_ATMOSPHERE_ATMOSPHERIC_GAS_LINK"
+                                 constraintName="FK_STATMATMGAS_ON_ATMOSPHERE" referencedColumnNames="ID"
+                                 referencedTableName="ST_ATMOSPHERE"/>
+    </changeSet>
+    <changeSet id="12" author="st">
+        <addForeignKeyConstraint baseColumnNames="ATMOSPHERIC_GAS_ID" baseTableName="ST_ATMOSPHERE_ATMOSPHERIC_GAS_LINK"
+                                 constraintName="FK_STATMATMGAS_ON_ATMOSPHERIC_GAS" referencedColumnNames="ID"
+                                 referencedTableName="ST_ATMOSPHERIC_GAS"/>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="st">
+        <addColumn tableName="ST_INDIVIDUAL">
+            <column name="UUID" type="UUID"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2" author="st">
+        <addForeignKeyConstraint baseColumnNames="ID" baseTableName="ST_INDIVIDUAL"
+                                 constraintName="FK_ST_INDIVIDUAL_ON_ID" referencedColumnNames="ID"
+                                 referencedTableName="ST_CUSTOMER"/>
+    </changeSet>
+    <changeSet id="3" author="st">
+        <dropColumn columnName="dtype" tableName="st_individual"/>
+    </changeSet>
+</databaseChangeLog>

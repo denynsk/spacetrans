@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="st">
+        <createTable tableName="ST_COMPANY">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_COMPANY"/>
+            </column>
+            <column name="REGISTRATION_ID" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COMPANY_TYPE" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="st">
+        <createTable tableName="ST_WAY_BILL">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_WAY_BILL"/>
+            </column>
+            <column name="REFERENCE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SHIPPER_ID" type="UUID"/>
+            <column name="CONSIGNEE_ID" type="UUID"/>
+            <column name="DEPARTURE_PORT_ID" type="UUID"/>
+            <column name="DESTINATION_PORT_ID" type="UUID"/>
+            <column name="CARRIER_ID" type="UUID"/>
+            <column name="TOTAL_WEIGHT" type="DOUBLE"/>
+            <column name="TOTAL_CHARGE" type="DECIMAL(19, 2)"/>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="st">
+        <createTable tableName="ST_WAY_BILL_ITEM">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_ST_WAY_BILL_ITEM"/>
+            </column>
+            <column name="NUMBER_" type="INT"/>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="CHARGE" type="DECIMAL(19, 2)"/>
+            <column name="WEIGHT" type="DOUBLE"/>
+            <column name="WAY_BILL_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DIM_LENGTH" type="DOUBLE"/>
+            <column name="DIM_WIDTH" type="DOUBLE"/>
+            <column name="DIM_HEIGHT" type="DOUBLE"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="st">
+        <createIndex indexName="IDX_ST_WAY_BILL_CARRIER" tableName="ST_WAY_BILL">
+            <column name="CARRIER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CARRIER_ID" baseTableName="ST_WAY_BILL"
+                                 constraintName="FK_ST_WAY_BILL_ON_CARRIER" referencedColumnNames="ID"
+                                 referencedTableName="ST_CARRIER"/>
+    </changeSet>
+    <changeSet id="5" author="st">
+        <createIndex indexName="IDX_ST_WAY_BILL_CONSIGNEE" tableName="ST_WAY_BILL">
+            <column name="CONSIGNEE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CONSIGNEE_ID" baseTableName="ST_WAY_BILL"
+                                 constraintName="FK_ST_WAY_BILL_ON_CONSIGNEE" referencedColumnNames="ID"
+                                 referencedTableName="ST_CUSTOMER"/>
+    </changeSet>
+    <changeSet id="6" author="st">
+        <createIndex indexName="IDX_ST_WAY_BILL_DEPARTURE_PORT" tableName="ST_WAY_BILL">
+            <column name="DEPARTURE_PORT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="DEPARTURE_PORT_ID" baseTableName="ST_WAY_BILL"
+                                 constraintName="FK_ST_WAY_BILL_ON_DEPARTURE_PORT" referencedColumnNames="ID"
+                                 referencedTableName="ST_SPACE_PORT"/>
+    </changeSet>
+    <changeSet id="7" author="st">
+        <createIndex indexName="IDX_ST_WAY_BILL_DESTINATION_PORT" tableName="ST_WAY_BILL">
+            <column name="DESTINATION_PORT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="DESTINATION_PORT_ID" baseTableName="ST_WAY_BILL"
+                                 constraintName="FK_ST_WAY_BILL_ON_DESTINATION_PORT" referencedColumnNames="ID"
+                                 referencedTableName="ST_SPACE_PORT"/>
+    </changeSet>
+    <changeSet id="8" author="st">
+        <createIndex indexName="IDX_ST_WAY_BILL_ITEM_WAY_BILL" tableName="ST_WAY_BILL_ITEM">
+            <column name="WAY_BILL_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="WAY_BILL_ID" baseTableName="ST_WAY_BILL_ITEM"
+                                 constraintName="FK_ST_WAY_BILL_ITEM_ON_WAY_BILL" referencedColumnNames="ID"
+                                 referencedTableName="ST_WAY_BILL"/>
+    </changeSet>
+    <changeSet id="9" author="st">
+        <createIndex indexName="IDX_ST_WAY_BILL_SHIPPER" tableName="ST_WAY_BILL">
+            <column name="SHIPPER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="SHIPPER_ID" baseTableName="ST_WAY_BILL"
+                                 constraintName="FK_ST_WAY_BILL_ON_SHIPPER" referencedColumnNames="ID"
+                                 referencedTableName="ST_CUSTOMER"/>
+    </changeSet>
+    <changeSet id="10" author="st">
+        <addForeignKeyConstraint baseColumnNames="ID" baseTableName="ST_COMPANY" constraintName="FK_ST_COMPANY_ON_ID"
+                                 referencedColumnNames="ID" referencedTableName="ST_CUSTOMER"/>
+    </changeSet>
+</databaseChangeLog>
