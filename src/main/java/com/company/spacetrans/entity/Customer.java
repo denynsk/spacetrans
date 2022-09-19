@@ -1,5 +1,6 @@
 package com.company.spacetrans.entity;
 
+import com.company.spacetrans.app.validate.EmailValidation;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
@@ -24,6 +25,7 @@ public class Customer {
     @NotNull
     private String name;
 
+    @EmailValidation( )
     @Column(name = "EMAIL")
     private String email;
 

@@ -25,6 +25,7 @@ public class Planet extends AstromomicalBody {
 
     @Column(name = "RINGS")
     private Boolean rings;
+
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "planet")
     private Moon moon;
 
